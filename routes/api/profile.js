@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
+const auth = require('../../middleware/auth');
+const checkObjectId = require('../../middleware/checkObjectId');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
@@ -88,6 +89,42 @@ router.post(
     } catch (error) {
       console.error(error.message);
       return res.status(500).send('Error del servidor');
+    }
+  }
+);
+
+// @route GET api/profile
+// @desc Obtener todos los perfiles
+// @access Public
+router.get('/', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name']);
+    res.json(profiles);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Error en el servidor');
+  }
+});
+
+// @route GET api/profile/user/:user_id
+// @desc Obtener el perfil por ID de usuario
+// @access Public
+router.get(
+  '/user/:user_id',
+  checkObjectId('user_id'),
+  async ({ params: { user_id } }, res) => {
+    try {
+      const profile = await Profile.findOne({
+        user: user_id,
+      }).populate('user', ['name']);
+
+      if (!profile)
+        return res.status(400).json({ msg: 'Perfil no encontrado' });
+
+      return res.json(profile);
+    } catch (error) {
+      console.error(error.message);
+      return res.status(500).json({ msg: 'Error del servidor' });
     }
   }
 );
