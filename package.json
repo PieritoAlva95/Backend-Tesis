@@ -1,0 +1,20 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend de la plataforma para la busqueda de empleo en la ciudad de Loja.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "serve": "nodemon server"
+  },
+  "author": "Jean Pierre Alvarado Chamba",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.16"
+  }
+}
