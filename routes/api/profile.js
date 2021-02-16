@@ -66,7 +66,7 @@ router.post(
       ...rest,
     };
 
-    // Build socialFields object
+    // Construir el objeto socialFields
     const socialFields = { twitter, instagram, facebook };
 
     // Normalizar los campos sociales para garantizar una url válida
@@ -147,5 +147,37 @@ router.delete('/', auth, async (req, res) => {
     res.status(500).send('Error del servidor');
   }
 });
+
+// @route PUT api/profile/experience
+// @desc Añadir experiencia al perfil
+// @access Private
+router.put(
+  '/experience',
+  auth,
+  check('title', 'El título es obligatorio').notEmpty(),
+  check('company', 'La empresa es necesaria').notEmpty(),
+  check('from', 'Se requiere la fecha de inicio y tiene que ser del pasado')
+    .notEmpty()
+    .custom((value, { req }) => (req.body.to ? value < req.body.to : true)),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.unshift(req.body);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Error del servidor');
+    }
+  }
+);
 
 module.exports = router;

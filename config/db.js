@@ -11,8 +11,8 @@ const connectDB = async () => {
       useFindAndModify: false,
     });
     console.log('(MongoDB) Base de datos conectada...');
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
     // Proceso de salida con fracaso.
     process.exit(1);
   }
