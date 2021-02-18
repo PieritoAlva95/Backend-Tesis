@@ -95,4 +95,55 @@ router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
   }
 });
 
+// @route PUT api/posts/like/:id
+// @desc Agregar interesados en el post
+// @access Private
+router.put('/like/:id', auth, checkObjectId('id'), async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    // Comprobar si ya se ha agregado al intteresado
+    if (post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json({ msg: 'Ya se agrego al usuario' });
+    }
+
+    post.likes.unshift({ user: req.user.id });
+
+    await post.save();
+
+    return res.json(post.likes);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: 'Error del servidor' });
+  }
+});
+
+// @route PUT api/posts/unlike/:id
+// @desc Quitar interesados en el post
+// @access Private
+router.put('/unlike/:id', auth, checkObjectId('id'), async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    // Comprobar si el usuario ha sido agrgado
+    if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res
+        .status(400)
+        .json({ msg: 'El usuario aun no ha sido agregado' });
+    }
+
+    // Quitar el usuario interesado
+    post.likes = post.likes.filter(
+      ({ user }) => user.toString() !== req.user.id
+    );
+
+    await post.save();
+
+    return res.json(post.likes);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error del servidor');
+  }
+});
+
 module.exports = router;
