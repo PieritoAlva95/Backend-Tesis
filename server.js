@@ -28,6 +28,6 @@ app.listen(
   PORT,
   console.log(
     `El servidor inicio en modo ${process.env.NODE_ENV} en el puerto ${PORT}`
-      .green.bold
+      .green.underline.bold
   )
 )

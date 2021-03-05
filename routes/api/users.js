@@ -12,7 +12,17 @@ const User = require('../../models/User')
 router.post(
   '/',
   [
-    check('name', 'El nombre es requerido').not().isEmpty(),
+    check('names', 'Los nombres son requeridos').not().isEmpty(),
+    check('lastNames', 'Los apellidos son requeridos').not().isEmpty(),
+    check('isAdmin', 'El atributo es necesario').not().isEmpty(),
+    check('mobileNumber', 'El numero de telefono es requerido')
+      .not()
+      .isEmpty()
+      .isLength({ min: 10, max: 10 }),
+    check('identityDocument', 'La cedula es requerida')
+      .not()
+      .isEmpty()
+      .isLength({ min: 10, max: 10 }),
     check('email', 'Por favor, incluya un correo electrónico válido').isEmail(),
     check(
       'password',
@@ -25,7 +35,15 @@ router.post(
       return res.status(400).json({ errors: errors.array() })
     }
 
-    const { name, email, password } = req.body
+    const {
+      names,
+      lastNames,
+      identityDocument,
+      mobileNumber,
+      email,
+      password,
+      isAdmin,
+    } = req.body
 
     try {
       // Ver si el usuario existe
@@ -38,9 +56,13 @@ router.post(
       }
 
       user = new User({
-        name,
+        names,
+        lastNames,
+        identityDocument,
+        mobileNumber,
         email,
         password,
+        isAdmin,
       })
 
       // Cifrar la contraseña
