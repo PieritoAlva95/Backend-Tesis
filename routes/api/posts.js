@@ -31,7 +31,8 @@ router.post(
         title: req.body.title,
         category: req.body.category,
         price: req.body.price,
-        name: user.name,
+        names: user.names,
+        lastNames: user.lastNames,
         user: req.user.id,
       })
 
@@ -50,7 +51,7 @@ router.post(
 // @access Public
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 })
+    const posts = await Post.find().sort({ createdAt: -1 })
     res.json(posts)
   } catch (error) {
     console.error(error.message)

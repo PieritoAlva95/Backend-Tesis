@@ -14,7 +14,10 @@ const PostSchema = new Schema(
       type: String,
       required: true,
     },
-    name: {
+    names: {
+      type: String,
+    },
+    lastNames: {
       type: String,
     },
     numComments: {
