@@ -1,4 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://JeanPierre:j95p250a@devconnector.j907i.mongodb.net/PlataformaJobs?retryWrites=true&w=majority",
-    "jwtSecret": "plataformaToken"
-}
