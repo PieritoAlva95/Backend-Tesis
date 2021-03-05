@@ -1,9 +1,13 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
+  },
+  title: {
+    type: String,
+    required: true,
   },
   text: {
     type: String,
@@ -11,6 +15,23 @@ const PostSchema = new Schema({
   },
   name: {
     type: String,
+  },
+  numComments: {
+    type: Number,
+    default: 0,
+  },
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  price: {
+    type: Number,
+    required: true,
+    default: 0.0,
+  },
+  category: {
+    type: String,
+    required: true,
   },
   likes: [
     {
@@ -41,6 +62,6 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-module.exports = mongoose.model('post', PostSchema);
+module.exports = mongoose.model('post', PostSchema)
