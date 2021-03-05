@@ -2,6 +2,8 @@ const express = require('express')
 const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 
+require('colors')
+
 dotenv.config()
 
 const app = express()
@@ -22,4 +24,10 @@ app.use('/api/users', require('./routes/api/users'))
 
 const PORT = process.env.PORT || 5000
 
-app.listen(PORT, console.log(`El servidor inicio en el puerto ${PORT}`))
+app.listen(
+  PORT,
+  console.log(
+    `El servidor inicio en modo ${process.env.NODE_ENV} en el puerto ${PORT}`
+      .green.bold
+  )
+)

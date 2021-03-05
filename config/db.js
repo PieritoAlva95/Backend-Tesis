@@ -8,9 +8,9 @@ const connectDB = async () => {
       useCreateIndex: true,
       useFindAndModify: false,
     })
-    console.log('(MongoDB) Base de datos conectada...')
+    console.log(`(MongoDB) Base de datos conectada...`.cyan.underline)
   } catch (error) {
-    console.error(error.message)
+    console.error(`Error: ${error.message}`.red.bold)
     // Proceso de salida con fracaso.
     process.exit(1)
   }
