@@ -1,6 +1,31 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const commentSchema = mongoose.Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+    },
+    text: {
+      type: String,
+      required: true,
+    },
+    names: {
+      type: String,
+    },
+    lastNames: {
+      type: String,
+    },
+    rating: {
+      type: Number,
+      require: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
+
 const PostSchema = new Schema(
   {
     user: {
@@ -48,24 +73,7 @@ const PostSchema = new Schema(
         },
       },
     ],
-    comments: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-        },
-        text: {
-          type: String,
-          required: true,
-        },
-        name: {
-          type: String,
-        },
-        date: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+    comments: [commentSchema],
   },
   {
     timestamps: true,

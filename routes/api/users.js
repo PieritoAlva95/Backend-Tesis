@@ -14,7 +14,6 @@ router.post(
   [
     check('names', 'Los nombres son requeridos').not().isEmpty(),
     check('lastNames', 'Los apellidos son requeridos').not().isEmpty(),
-    check('isAdmin', 'El atributo es necesario').not().isEmpty(),
     check('mobileNumber', 'El numero de telefono es requerido')
       .not()
       .isEmpty()
