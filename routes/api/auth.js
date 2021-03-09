@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res) => {
     res.json(user)
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Error del servidor')
+    res.status(500).send({ msg: 'Error del servidor' })
   }
 })
 
@@ -25,31 +25,27 @@ router.get('/', auth, async (req, res) => {
 // @access Public
 router.post(
   '/',
-  check('email', 'Por favor, incluya un correo electrónico válido').isEmail(),
-  check('password', 'Se requiere una contraseña').exists(),
+  check('email').isEmail().notEmpty(),
+  check('password').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
+      return res.status(400).json({ msg: 'Credenciales invalidas' })
     }
 
     const { email, password } = req.body
 
     try {
-      let user = await User.findOne({ email })
+      const user = await User.findOne({ email })
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Credenciales inválidas' }] })
+        return res.status(400).json({ msg: 'Credenciales inválidas' })
       }
 
       const isMatch = await bcrypt.compare(password, user.password)
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Credenciales inválidas' }] })
+        return res.status(400).json({ msg: 'Credenciales inválidas' })
       }
 
       const payload = {
@@ -64,12 +60,19 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err
-          res.json({ token })
+          res.json({
+            _id: user._id,
+            names: user.names,
+            lastNames: user.lastNames,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: token,
+          })
         }
       )
     } catch (err) {
       console.error(err.message)
-      res.status(500).send('Error del servidor')
+      res.status(500).send({ msg: 'Error del servidor' })
     }
   }
 )

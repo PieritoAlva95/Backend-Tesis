@@ -16,7 +16,7 @@ router.post(
   check('text', 'El texto es obligatorio').notEmpty(),
   check('category', 'La categoria es obligatoria').notEmpty(),
   check('price', 'El precio es obligatorio').notEmpty().isNumeric(),
-  check('price', 'El titulo es obligatorio').exists().notEmpty(),
+  check('title', 'El titulo es obligatorio').exists().notEmpty(),
   async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -41,7 +41,7 @@ router.post(
       res.json(post)
     } catch (error) {
       console.error(error.message)
-      res.status(500).send('Error del servidor')
+      res.status(500).send({ msg: 'Error del servidor' })
     }
   }
 )
@@ -159,6 +159,7 @@ router.post(
   auth,
   checkObjectId('id'),
   check('text', 'El texto es obligatorio').notEmpty(),
+  check('rating', 'La calificaion es obligatoria').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -171,7 +172,9 @@ router.post(
 
       const newComment = {
         text: req.body.text,
-        name: user.name,
+        names: user.names,
+        lastNames: user.lastNames,
+        rating: req.body.rating,
         user: req.user.id,
       }
 

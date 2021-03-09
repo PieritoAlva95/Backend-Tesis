@@ -5,6 +5,7 @@ const commentSchema = mongoose.Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
+      ref: 'user',
     },
     text: {
       type: String,
@@ -30,6 +31,7 @@ const PostSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
+      ref: 'user',
     },
     title: {
       type: String,
@@ -70,6 +72,7 @@ const PostSchema = new Schema(
       {
         user: {
           type: Schema.Types.ObjectId,
+          ref: 'user',
         },
       },
     ],
